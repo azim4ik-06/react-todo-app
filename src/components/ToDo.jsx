@@ -15,39 +15,41 @@ export default function ToDo() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  const addTodo = () => {
+  const addTodo = (event) => {
     event.preventDefault();
 
-    if (inputValue.trim().length === 0) return; {
-      const newTasks = {
-        id: new Date(),
-        name: inputValue,
-        completed: false,
-      };
-      setTasks([...tasks, newTasks]);
-      setInput("");
-    }
+    if (inputValue.trim().length === 0) return;
+
+    const newTasks = {
+      id: new Date(),
+      name: inputValue,
+      completed: false,
+    };
+    
+    setTasks([...tasks, ...[newTasks]]);
+
+    setInput("");
   };
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
 
   const deleteTasks = (id) => {
     const newTasks = tasks.filter((el) => el.id != id);
+
     setTasks(newTasks);
   };
 
-  const completedTask = (id) => {
+  const completeTask = (id) => {
     const newTasks = tasks.map((task) => {
       if (task.id === id) {
-        const newTask = { ...tasks, completed: !tasks.completed }
-        return newTask
+        const newTask = { ...task, completed: !task.completed };
+        return newTask;
       } else {
-        return 
+        return task;
       }
-    })
-  }
+    });
+
+    setTasks(newTasks);
+  };
 
   return (
     <div>
@@ -67,7 +69,12 @@ export default function ToDo() {
           </form>
           <div className="my-2">
             {tasks.map((task) => (
-              <ListItem onDelete={deleteTasks} key={task.id} {...task} />
+              <ListItem
+                onComplete={completeTask}
+                onDelete={deleteTasks}
+                key={task.id}
+                {...task}
+              />
             ))}
           </div>
         </div>

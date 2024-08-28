@@ -1,10 +1,14 @@
-export default function ListItem({ id, name, completed, onDelete }) {
+export default function ListItem({ id, name, completed, onDelete, onComplete,}) {
   return (
-    <div className="flex justify-between items-center mt-4">
+    <div
+      className={`flex justify-between items-center mt-4 ${
+        completed ? "line-through text-gray-700" : ""
+      }`}
+    >
       {name}
       <div className="space-x-2">
         <button
-          className="rounded-lg p-2 bg-red-300 text-slate-900 hover:text-red-900"
+          className="rounded-lg p-2 bg-red-400 text-slate-900 hover:bg-red-300 hover:text-red-900 hover:scale-125 hover:duration-500 hover:shadow-lg "
           onClick={() => onDelete(id)}
         >
           <svg
@@ -13,7 +17,7 @@ export default function ListItem({ id, name, completed, onDelete }) {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-5 hover:size-6 hover:duration-400"
+            className="size-5"
           >
             <path
               strokeLinecap="round"
@@ -22,14 +26,17 @@ export default function ListItem({ id, name, completed, onDelete }) {
             />
           </svg>
         </button>
-        <button className="rounded-lg p-2 bg-green-300 text-slate-900 hover:text-emerald-700">
+        <button
+          onClick={() => onComplete(id)}
+          className="rounded-lg p-2 bg-green-400 text-slate-900 hover:bg-green-300 hover:text-emerald-700 hover:scale-125 hover:duration-500"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-5 hover:size-6"
+            className="size-5"
           >
             <path
               strokeLinecap="round"
