@@ -8,7 +8,7 @@ export default function ListItem({ id, name, completed, onDelete, onComplete,}) 
       {name}
       <div className="space-x-2">
         <button
-          className="rounded-lg p-2 bg-red-400 text-slate-900 hover:bg-red-300 hover:text-red-900 hover:scale-125 hover:duration-500 hover:shadow-lg "
+          className="rounded-lg p-2 bg-red-400 text-slate-900 hover:bg-red-300 hover:text-red-900 hover:scale-125 hover:duration-300 hover:ease-in-out hover:shadow-lg "
           onClick={() => onDelete(id)}
         >
           <svg
@@ -28,7 +28,7 @@ export default function ListItem({ id, name, completed, onDelete, onComplete,}) 
         </button>
         <button
           onClick={() => onComplete(id)}
-          className="rounded-lg p-2 bg-green-400 text-slate-900 hover:bg-green-300 hover:text-emerald-700 hover:scale-125 hover:duration-500"
+          className="rounded-lg p-2 bg-green-400 text-slate-900 hover:bg-green-300 hover:text-emerald-700 hover:scale-125 hover:duration-300 hover:ease-in-out hover:shadow-md"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
