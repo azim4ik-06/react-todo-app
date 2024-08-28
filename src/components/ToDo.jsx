@@ -2,27 +2,12 @@ import { useEffect, useState } from "react";
 import Box from "./Box";
 import ListItem from "./ListItem";
 
+const tasksFromLS = localStorage.getItem("tasks");
+
 export default function ToDo() {
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    return savedTasks ? JSON.parse(savedTasks) : [
-          {
-            id: 1,
-            name: "Закрыть задачу",
-            completed: false,
-          },
-          {
-            id: 2,
-            name: "Приготовить ужин",
-            completed: false,
-          },
-          {
-            id: 3,
-            name: "Купить продукты",
-            completed: false,
-          },
-        ];
-  });
+  const [tasks, setTasks] = useState(
+    tasksFromLS ? JSON.parse(tasksFromLS) : []
+  );
 
   const [inputValue, setInput] = useState("");
 
@@ -30,18 +15,39 @@ export default function ToDo() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  const addTodo = (event) => {
+  const addTodo = () => {
     event.preventDefault();
 
-    const newTasks = {
-      id: Date.now(),
-      name: inputValue,
-      completed: false,
-    };
-
-    setTasks([...tasks, newTasks]);
-    setInput("");
+    if (inputValue.trim().length === 0) return; {
+      const newTasks = {
+        id: new Date(),
+        name: inputValue,
+        completed: false,
+      };
+      setTasks([...tasks, newTasks]);
+      setInput("");
+    }
   };
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  const deleteTasks = (id) => {
+    const newTasks = tasks.filter((el) => el.id != id);
+    setTasks(newTasks);
+  };
+
+  const completedTask = (id) => {
+    const newTasks = tasks.map((task) => {
+      if (task.id === id) {
+        const newTask = { ...tasks, completed: !tasks.completed }
+        return newTask
+      } else {
+        return 
+      }
+    })
+  }
 
   return (
     <div>
@@ -53,18 +59,15 @@ export default function ToDo() {
               type="text"
               onChange={(event) => setInput(event.target.value)}
               value={inputValue}
-              className="p-2 border border-slate-300 rounded-xl me-3"
+              className="p-2 border border-slate-300 rounded-xl me-3 focus:outline-indigo-400"
             />
-            <button
-              onClick={addTodo}
-              className="bg-indigo-200 px-4 py-2 rounded-xl hover:bg-indigo-400 active:bg-indigo-500"
-            >
+            <button className="bg-indigo-200 px-4 py-2 rounded-xl hover:duration-500 hover:bg-indigo-400 hover:text-gray-50 active:bg-indigo-500">
               Добавить
             </button>
           </form>
-          <div className="space-y-2">
+          <div className="my-2">
             {tasks.map((task) => (
-              <ListItem key={task.id} {...task} />
+              <ListItem onDelete={deleteTasks} key={task.id} {...task} />
             ))}
           </div>
         </div>
